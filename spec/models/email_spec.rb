@@ -82,7 +82,7 @@ describe Email do
         expect(@new_email.send_confirmation).to eq(false)
       end
 
-      it "creates a confirmation key when sending confirmation" do
+      it "creates a confirmation key" do
         expect(@new_email.confirmation_key).to eq(nil)
         @new_email.save
         expect(@new_email.send_confirmation).to eq(true)
@@ -97,6 +97,15 @@ describe Email do
         expect(@new_email.confirmation_key).to_not eq(old_key)
         expect(old_key).to_not eq(nil)
         expect(@new_email.confirmation_key).to_not eq(nil)
+      end
+
+      it "increases the confirmation attempts on success" do
+        attempts = @new_email.confirmation_attempts
+        expect(@new_email.send_confirmation).to eq(false)
+        expect(@new_email.confirmation_attempts).to eq(attempts)
+        @new_email.save
+        expect(@new_email.send_confirmation).to eq(true)
+        expect(@new_email.confirmation_attempts).to eq(attempts+1)
       end
     end
 
@@ -133,8 +142,6 @@ describe Email do
         expect(@new_email.confirm confirm_key).to eq(true)
         expect(@new_email.confirmed?).to eq(true)
       end
-
-      
     end
   end
 end

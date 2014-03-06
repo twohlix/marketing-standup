@@ -21,11 +21,13 @@ class Email < ActiveRecord::Base
     self[:confirmation_key] = md5.hexdigest "#{address}#{Time.now.usec.to_s}"
   
     return false if changes.count > 1
+    self[:confirmation_attempts] += 1
     save
   end
 
   def confirm(key=nil)
-    return false unless persisted?
+    return false unless persisted? 
+    return false if confirmed? #no need to confirm again
     return false if key.blank?
     return false if self[:confirmation_key].blank?
 
