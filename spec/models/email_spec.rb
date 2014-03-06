@@ -52,6 +52,15 @@ describe Email do
       @last_email = Email.last
       expect(@last_email.address).to eq(@last_email.address.downcase)
     end
+
+    it "does not allow addresses to changed" do
+      @new_email.address = "unchanged@example.com"
+      @new_email.save
+
+      @last_email = Email.last
+      @last_email.address = "changed@example.co.uk"
+      expect(@last_email.save).to eq(false)
+    end
   end
 
   context "confirmation" do

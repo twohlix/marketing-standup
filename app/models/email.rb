@@ -3,11 +3,15 @@ class Email < ActiveRecord::Base
 
   after_initialize :default_values
   def default_values
+    self.confirmed = false if self.confirmed.nil?
     self.confirmation_attempts = 0 if self.confirmation_attempts.nil?
   end
 
   validates :address, presence: true, uniqueness: { case_sensitive: false }
-
+  validate :address_does_not_change, on: :update
+  def address_does_not_change
+    errors.add(:address, "cannot be changed once saved") if address_changed?
+  end
 
   def address=(addy)
     self[:address] = addy.downcase
@@ -19,9 +23,9 @@ class Email < ActiveRecord::Base
     md5 = Digest::MD5.new
 
     self[:confirmation_key] = md5.hexdigest "#{address}#{Time.now.usec.to_s}"
-  
-    return false if changes.count > 1
     self[:confirmation_attempts] += 1
+    self[:confirmation_send_date] = DateTime.now
+    return false if changes.count != 3
     save
   end
 
@@ -34,6 +38,7 @@ class Email < ActiveRecord::Base
     if key.eql? self[:confirmation_key]
       self[:confirmed] = true
       self[:confirmation_date] = DateTime.now
+      save if changes.count == 2
       return true
     end
 
