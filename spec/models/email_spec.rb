@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Email do
   context "new object" do
-    before do
+    before(:each) do
       @email = Email.new
       expect(@email.new_record?).to eq(true)
       expect(@email.persisted?).to eq(false)
@@ -24,7 +24,7 @@ describe Email do
   end
 
   context "persisted object" do
-    before do
+    before(:each) do
       @new_email = Email.new
     end
 
@@ -43,6 +43,14 @@ describe Email do
       @newer_email = Email.new
       @newer_email.address = @new_email.address
       expect(@newer_email.save).to eq(false)
+    end
+
+    it "has lowercase addresses" do
+      @new_email.address = "Upper@lowercaseme.com"
+      @new_email.save
+      
+      @last_email = Email.last
+      expect(@last_email.address).to eq(@last_email.address.downcase)
     end
   end
 end
