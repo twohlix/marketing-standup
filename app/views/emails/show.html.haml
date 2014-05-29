@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Address:
+  = @email.address
+%p
+  %b Confirmed:
+  = @email.confirmed
+%p
+  %b Confirmation key:
+  = @email.confirmation_key
+%p
+  %b Confirmation send date:
+  = @email.confirmation_send_date
+%p
+  %b Confirmation date:
+  = @email.confirmation_date
+%p
+  %b Confirmation attempts:
+  = @email.confirmation_attempts
+%p
+  %b Signup date:
+  = @email.signup_date
+
+= link_to 'Edit', edit_email_path(@email)
+\|
+= link_to 'Back', emails_path

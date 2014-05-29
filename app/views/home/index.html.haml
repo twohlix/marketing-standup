@@ -1,2 +1,8 @@
 %h1 Welcome
 %p You should put your email in me!
+%p
+  = simple_form_for @email do |f|
+    .form-inputs
+      = f.input :address
+    .form-actions
+      = f.button :submit

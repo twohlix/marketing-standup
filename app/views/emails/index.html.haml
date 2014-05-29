@@ -1,0 +1,31 @@
+%h1 Listing emails
+
+%table
+  %tr
+    %th Address
+    %th Confirmed
+    %th Confirmation key
+    %th Confirmation send date
+    %th Confirmation date
+    %th Confirmation attempts
+    %th Signup date
+    %th
+    %th
+    %th
+
+  - @emails.each do |email|
+    %tr
+      %td= email.address
+      %td= email.confirmed
+      %td= email.confirmation_key
+      %td= email.confirmation_send_date
+      %td= email.confirmation_date
+      %td= email.confirmation_attempts
+      %td= email.signup_date
+      %td= link_to 'Show', email
+      %td= link_to 'Edit', edit_email_path(email)
+      %td= link_to 'Destroy', email, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Email', new_email_path
