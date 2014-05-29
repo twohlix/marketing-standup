@@ -43,6 +43,10 @@ describe Email do
       @newer_email = Email.new
       @newer_email.address = @new_email.address
       expect(@newer_email.save).to eq(false)
+
+      @newerest_email = Email.new
+      @newerest_email.address = "test2+filter@example.com"
+      expect(@newerest_email.save).to eq(false)
     end
 
     it "has lowercase addresses" do

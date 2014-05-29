@@ -7,14 +7,23 @@ class Email < ActiveRecord::Base
     self.confirmation_attempts = 0 if self.confirmation_attempts.nil?
   end
 
+  validates :base_address, presence: true, uniqueness: { case_sensitive: false }
   validates :address, presence: true, uniqueness: { case_sensitive: false }
+  
+
   validate :address_does_not_change, on: :update
   def address_does_not_change
-    errors.add(:address, "cannot be changed once saved") if address_changed?
+    errors.add(:address, "cannot be changed once saved") if address_changed?||base_address_changed?
   end
 
   def address=(addy)
     self[:address] = addy.downcase
+
+    # make this into our standard email with no spam tags
+    # so we can compare example+marketing@domain.com with example@domain.com
+    base = addy.downcase
+    base.slice! /\+[a-z0-9_]*/
+    self[:base_address] = base 
   end
 
   def send_confirmation
@@ -44,6 +53,4 @@ class Email < ActiveRecord::Base
 
     false
   end
-
-
 end
