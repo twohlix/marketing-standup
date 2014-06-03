@@ -1,0 +1,11 @@
+development:
+  username: charles@balconyinfive.com
+  api_key: eXamPleKeyHere
+
+production:
+  username: charles@balconyinfive.com
+  api_key: eXamPleKeyHere
+
+test:
+  username: charles@balconyinfive.com
+  api_key: eXamPleKeyHere

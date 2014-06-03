@@ -1,5 +1,6 @@
 class EmailsController < ApplicationController
   before_action :set_email, only: [:show, :edit, :update, :destroy]
+  before_action :set_email_with_confirmation_key, only: [:confirm]
 
   # GET /emails
   # GET /emails.json
@@ -28,6 +29,7 @@ class EmailsController < ApplicationController
 
     respond_to do |format|
       if @email.save
+        @email.send_confirmation
         format.html { redirect_to thanks_url, notice: 'Email was successfully created.' }
         format.json { render action: 'show', status: :created, location: @email }
       else
@@ -61,10 +63,25 @@ class EmailsController < ApplicationController
     end
   end
 
+  # GET /confirm/msd220232502303
+  def confirm
+    set_email_with_confirmation_key
+
+    if @email.empty?
+
+    else
+
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_email
       @email = Email.find(params[:id])
+    end
+
+    def set_email_with_confirmation_key
+      @email = Email.find_by confirmation_key: params[:confirmation_key]
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

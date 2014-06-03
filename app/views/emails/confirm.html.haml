@@ -1,0 +1,7 @@
+%h1 Email#confirm
+%p Find me in app/views/email/confirm.html.haml
+
+-if @email.nil?
+  %p No email found with that confirmation key
+-else
+  %p= "#{@email.address} confirmed! Thank you"

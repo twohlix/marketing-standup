@@ -9,7 +9,6 @@ class Email < ActiveRecord::Base
 
   validates :base_address, presence: true, uniqueness: { case_sensitive: false }
   validates :address, presence: true, uniqueness: { case_sensitive: false }
-  
 
   validate :address_does_not_change, on: :update
   def address_does_not_change
@@ -33,8 +32,12 @@ class Email < ActiveRecord::Base
 
     self[:confirmation_key] = md5.hexdigest "#{address}#{Time.now.usec.to_s}"
     self[:confirmation_attempts] += 1
+    return false if changes.count != 2
+
+    #send email here
     self[:confirmation_send_date] = DateTime.now
-    return false if changes.count != 3
+    ListMailer.confirm_email(self).deliver
+
     save
   end
 

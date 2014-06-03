@@ -75,11 +75,12 @@ MarketingStandup::Application.configure do
     config.action_mailer.smtp_settings = {
       :address   => "smtp.mandrillapp.com",
       :port      => 587,
-      :user_name => ENV["MANDRILL_USERNAME"],
-      :password  => ENV["MANDRILL_APIKEY"]
+      :enable_starttls_auto => true,
+      :user_name => MANDRILL_CONFIG["username"],
+      :password  => MANDRILL_CONFIG["api_key"],
     }
   # ActionMailer Config
-  config.action_mailer.default_url_options = { :host => 'example.com' }
+  config.action_mailer.default_url_options = { :host => 'email.juliette.balconyinfive.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
