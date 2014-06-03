@@ -65,6 +65,26 @@ describe Email do
       @last_email.address = "changed@example.co.uk"
       expect(@last_email.save).to eq(false)
     end
+
+    it "has a unique public_id" do
+      @new_email.address = "new@example.com"
+      new_public_id = @new_email.public_id
+
+      @newer_email = Email.new
+      @newer_email.address = "new2@example.com"
+      newer_public_id = @newer_email.public_id
+      expect(new_public_id).to_not eq(newer_public_id)
+    end
+
+    it "has a public_id that is consistent to the same address" do
+      @new_email.address = "newee@example.com"
+      new_public_id = @new_email.public_id
+
+      @newer_email = Email.new
+      @newer_email.address = "newee@example.com"
+      newer_public_id = @newer_email.public_id
+      expect(new_public_id).to eq(newer_public_id)
+    end
   end
 
   context "confirmation" do

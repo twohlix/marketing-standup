@@ -6,7 +6,6 @@ class AddBaseAddressToEmails < ActiveRecord::Migration
   end
 
   def down
-    remove_column :emails, :base_address
-    remove_index :emails, :base_address
+    remove_column :emails, :base_address    
   end
 end

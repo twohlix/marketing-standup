@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529021841) do
+ActiveRecord::Schema.define(version: 20140603230301) do
 
   create_table "emails", force: true do |t|
     t.string   "address",                                null: false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140529021841) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "base_address",           default: "",    null: false
+    t.string   "public_id",              default: "",    null: false
   end
 
 end

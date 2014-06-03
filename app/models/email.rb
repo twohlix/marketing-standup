@@ -3,33 +3,33 @@ class Email < ActiveRecord::Base
 
   after_initialize :default_values
   def default_values
+    if self.address.present?
+      self.base_address = generate_base_address if self.base_address.blank?
+      self.public_id = generate_public_id if self.public_id.blank?
+    end
     self.confirmed = false if self.confirmed.nil?
     self.confirmation_attempts = 0 if self.confirmation_attempts.nil?
   end
 
+  validates :public_id, presence: true, uniqueness: { case_sensitive: false }
   validates :base_address, presence: true, uniqueness: { case_sensitive: false }
   validates :address, presence: true, uniqueness: { case_sensitive: false }
 
   validate :address_does_not_change, on: :update
   def address_does_not_change
-    errors.add(:address, "cannot be changed once saved") if address_changed?||base_address_changed?
+    errors.add(:address, "cannot be changed once saved") if address_changed?
   end
 
   def address=(addy)
     self[:address] = addy.downcase
-
-    # make this into our standard email with no spam tags
-    # so we can compare example+marketing@domain.com with example@domain.com
-    base = addy.downcase
-    base.slice! /\+[a-z0-9_]*/
-    self[:base_address] = base 
+    generate_base_address
+    generate_public_id
   end
 
   def send_confirmation
     return false unless persisted?
 
     md5 = Digest::MD5.new
-
     self[:confirmation_key] = md5.hexdigest "#{address}#{Time.now.usec.to_s}"
     self[:confirmation_attempts] += 1
     return false if changes.count != 2
@@ -55,5 +55,20 @@ class Email < ActiveRecord::Base
     end
 
     false
+  end
+
+  private
+  def generate_base_address
+    # make this into our standard email with no spam tags
+    # so we can compare example+marketing@domain.com with example@domain.com
+    base = self[:address]
+    base.slice! /\+[a-z0-9_]*/
+    self[:base_address] = base 
+  end
+
+  def generate_public_id
+    #create the public_id
+    md5 = Digest::MD5.new
+    self[:public_id] = md5.hexdigest "#{self[:base_address]}.public_id_salt"
   end
 end
