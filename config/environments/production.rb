@@ -72,13 +72,6 @@ MarketingStandup::Application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify  
 
-    config.action_mailer.smtp_settings = {
-      :address   => "smtp.mandrillapp.com",
-      :port      => 587,
-      :enable_starttls_auto => true,
-      :user_name => MANDRILL_CONFIG["username"],
-      :password  => MANDRILL_CONFIG["api_key"],
-    }
   # ActionMailer Config
   config.action_mailer.default_url_options = { :host => 'email.juliette.balconyinfive.com' }
   config.action_mailer.delivery_method = :smtp
