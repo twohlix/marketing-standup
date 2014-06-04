@@ -23,7 +23,7 @@ describe EmailsController do
   # This should return the minimal set of attributes required to create a valid
   # Email. As you add validations to Email, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "address" => "MyString" } }
+  let(:valid_attributes) { { "address" => "MyString@Example.com" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -41,7 +41,7 @@ describe EmailsController do
   describe "GET show" do
     it "assigns the requested email as @email" do
       email = Email.create! valid_attributes
-      get :show, {:id => email.to_param}, valid_session
+      get :show, {:public_id => email.to_param}, valid_session
       assigns(:email).should eq(email)
     end
   end
@@ -56,7 +56,7 @@ describe EmailsController do
   describe "GET edit" do
     it "assigns the requested email as @email" do
       email = Email.create! valid_attributes
-      get :edit, {:id => email.to_param}, valid_session
+      get :edit, {:public_id => email.to_param}, valid_session
       assigns(:email).should eq(email)
     end
   end
@@ -75,9 +75,9 @@ describe EmailsController do
         assigns(:email).should be_persisted
       end
 
-      it "redirects to the created email" do
+      it "redirects to the thank you page" do
         post :create, {:email => valid_attributes}, valid_session
-        response.should redirect_to(Email.last)
+        response.should redirect_to(thanks_url)
       end
     end
 
@@ -107,18 +107,18 @@ describe EmailsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Email.any_instance.should_receive(:update).with({ "address" => "MyString" })
-        put :update, {:id => email.to_param, :email => { "address" => "MyString" }}, valid_session
+        put :update, {:public_id => email.to_param, :email => { "address" => "MyString" }}, valid_session
       end
 
       it "assigns the requested email as @email" do
         email = Email.create! valid_attributes
-        put :update, {:id => email.to_param, :email => valid_attributes}, valid_session
+        put :update, {:public_id => email.to_param, :email => valid_attributes}, valid_session
         assigns(:email).should eq(email)
       end
 
       it "redirects to the email" do
         email = Email.create! valid_attributes
-        put :update, {:id => email.to_param, :email => valid_attributes}, valid_session
+        put :update, {:public_id => email.to_param, :email => valid_attributes}, valid_session
         response.should redirect_to(email)
       end
     end
@@ -128,7 +128,7 @@ describe EmailsController do
         email = Email.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Email.any_instance.stub(:save).and_return(false)
-        put :update, {:id => email.to_param, :email => { "address" => "invalid value" }}, valid_session
+        put :update, {:public_id => email.to_param, :email => { "address" => "invalid value" }}, valid_session
         assigns(:email).should eq(email)
       end
 
@@ -136,7 +136,7 @@ describe EmailsController do
         email = Email.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Email.any_instance.stub(:save).and_return(false)
-        put :update, {:id => email.to_param, :email => { "address" => "invalid value" }}, valid_session
+        put :update, {:public_id => email.to_param, :email => { "address" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end
@@ -146,13 +146,13 @@ describe EmailsController do
     it "destroys the requested email" do
       email = Email.create! valid_attributes
       expect {
-        delete :destroy, {:id => email.to_param}, valid_session
+        delete :destroy, {:public_id => email.to_param}, valid_session
       }.to change(Email, :count).by(-1)
     end
 
     it "redirects to the emails list" do
       email = Email.create! valid_attributes
-      delete :destroy, {:id => email.to_param}, valid_session
+      delete :destroy, {:public_id => email.to_param}, valid_session
       response.should redirect_to(emails_url)
     end
   end

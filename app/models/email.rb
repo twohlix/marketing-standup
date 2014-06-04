@@ -20,6 +20,10 @@ class Email < ActiveRecord::Base
     errors.add(:address, "cannot be changed once saved") if address_changed?
   end
 
+  def to_param
+    public_id
+  end
+
   def address=(addy)
     self[:address] = addy.downcase
     generate_base_address

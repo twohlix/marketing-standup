@@ -12,11 +12,11 @@ describe EmailsController do
     end
 
     it "routes to #show" do
-      get("/emails/1").should route_to("emails#show", :id => "1")
+      get("/emails/1").should route_to("emails#show", :public_id => "1")
     end
 
     it "routes to #edit" do
-      get("/emails/1/edit").should route_to("emails#edit", :id => "1")
+      get("/emails/1/edit").should route_to("emails#edit", :public_id => "1")
     end
 
     it "routes to #create" do
@@ -24,11 +24,11 @@ describe EmailsController do
     end
 
     it "routes to #update" do
-      put("/emails/1").should route_to("emails#update", :id => "1")
+      put("/emails/1").should route_to("emails#update", :public_id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/emails/1").should route_to("emails#destroy", :id => "1")
+      delete("/emails/1").should route_to("emails#destroy", :public_id => "1")
     end
 
   end

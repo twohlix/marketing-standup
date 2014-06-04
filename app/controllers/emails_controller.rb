@@ -8,8 +8,8 @@ class EmailsController < ApplicationController
     @emails = Email.all
   end
 
-  # GET /emails/1
-  # GET /emails/1.json
+  # GET /emails/abc203502e203
+  # GET /emails/abc203502e203.json
   def show
   end
 
@@ -77,7 +77,11 @@ class EmailsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_email
-      @email = Email.find(params[:id])
+      if params[:public_id].present?
+        @email = Email.find_by public_id: params[:public_id]
+      else
+        @email = Email.find(params[:id])
+      end
     end
 
     def set_email_with_confirmation_key
